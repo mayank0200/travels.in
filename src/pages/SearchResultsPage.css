@@ -1,0 +1,20 @@
+.search-results-page {
+  background: var(--bg-color);
+}
+
+.search-results-page .py-60 {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.search-results-page .mt-2 {
+  margin-top: 8px;
+}
+
+.search-results-page .mt-4 {
+  margin-top: 24px;
+}
+
+.search-results-page .inline-block {
+  display: inline-block;
+}

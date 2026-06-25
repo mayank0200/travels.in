@@ -1,0 +1,26 @@
+.category-hero {
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.category-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: #ffc107;
+}
+
+.category-subtitle {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.py-60 {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
