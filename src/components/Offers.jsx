@@ -73,6 +73,7 @@ const TrendingPackages = () => {
             </AnimatedSection>
           ))}
         </div>
+      </div>
     </section>
   );
 };
