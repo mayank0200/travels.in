@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 import { FaSearch, FaHeart, FaBars, FaTimes, FaChevronDown, FaPhoneAlt, FaWhatsapp } from 'react-icons/fa';
 import { contactInfo } from '../data/travelData';
-import BookingModal from './BookingModal';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -54,7 +53,7 @@ const Header = () => {
           <Link to="/tours" className="header__icon-btn hide-mobile" aria-label="Wishlist">
             <FaHeart />
           </Link>
-          <button onClick={() => setIsModalOpen(true)} className="header__cta hide-mobile">
+          <button onClick={() => navigate('/book', { state: { name: 'General Enquiry', image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80', price: null, duration: null, type: 'general' } })} className="header__cta hide-mobile">
             <FaWhatsapp /> Enquire Now
           </button>
           <button className="header__hamburger hide-desktop" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
@@ -91,7 +90,7 @@ const Header = () => {
             <FaPhoneAlt /> {contactInfo.phone}
           </a>
           <button 
-            onClick={() => { setIsModalOpen(true); setMenuOpen(false); }} 
+            onClick={() => { navigate('/book', { state: { name: 'General Enquiry', image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80', price: null, duration: null, type: 'general' } }); setMenuOpen(false); }} 
             className="btn-primary" 
             style={{marginTop: '16px', width: '100%', textAlign: 'center', display: 'block'}}
           >
@@ -99,13 +98,6 @@ const Header = () => {
           </button>
         </div>
       </div>
-
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        destinationName="General Enquiry"
-        type="general"
-      />
     </header>
   );
 };

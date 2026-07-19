@@ -1,10 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Offers.css';
 import { trendingPackages } from '../data/travelData';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { FaStar, FaClock, FaHotel, FaUtensils, FaCar } from 'react-icons/fa';
-import { useState } from 'react';
-import BookingModal from './BookingModal';
 
 const AnimatedSection = ({ children, className = '' }) => {
   const [ref, isVisible] = useScrollAnimation(0.1);
@@ -12,8 +11,7 @@ const AnimatedSection = ({ children, className = '' }) => {
 };
 
 const TrendingPackages = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingItem, setBookingItem] = useState('');
+  const navigate = useNavigate();
 
   return (
     <section className="trending" id="packages">
@@ -64,8 +62,7 @@ const TrendingPackages = () => {
                     <button 
                       className="btn-primary btn-sm" 
                       onClick={() => {
-                        setBookingItem(pkg.name);
-                        setIsModalOpen(true);
+                        navigate('/book', { state: { name: pkg.name, image: pkg.image, price: pkg.price, duration: pkg.duration, type: 'tour' } });
                       }}
                     >
                       Book Now
@@ -76,12 +73,6 @@ const TrendingPackages = () => {
             </AnimatedSection>
           ))}
         </div>
-      </div>
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        destinationName={bookingItem} 
-      />
     </section>
   );
 };

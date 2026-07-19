@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './ToursPage.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { trendingPackages, popularDestinations } from '../data/travelData';
 import { FaStar, FaClock, FaHotel, FaUtensils, FaCar, FaSearch, FaFilter } from 'react-icons/fa';
-import BookingModal from '../components/BookingModal';
 
 const ToursPage = () => {
   const [filter, setFilter] = useState('all');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingItem, setBookingItem] = useState('');
+  const navigate = useNavigate();
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const allPackages = [...trendingPackages];
 
-  const handleBookNow = (pkgName) => {
-    setBookingItem(pkgName);
-    setIsModalOpen(true);
+  const handleBookNow = (pkg) => {
+    navigate('/book', { state: { name: pkg.name, image: pkg.image, price: pkg.price, duration: pkg.duration, type: 'tour' } });
   };
 
   return (
@@ -79,7 +76,7 @@ const ToursPage = () => {
                       <span className="tours-page__original">₹{pkg.originalPrice.toLocaleString()}</span>
                       <span className="tours-page__price">₹{pkg.price.toLocaleString()}</span>
                     </div>
-                    <button className="btn-primary btn-sm" onClick={() => handleBookNow(pkg.name)}>
+                    <button className="btn-primary btn-sm" onClick={() => handleBookNow(pkg)}>
                       Book Now
                     </button>
                   </div>
@@ -107,12 +104,6 @@ const ToursPage = () => {
             </div>
           </div>
         </div>
-      </section>
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        destinationName={bookingItem} 
-      />
     </div>
   );
 };

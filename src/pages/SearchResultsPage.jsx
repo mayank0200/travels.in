@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { popularDestinations, trendingPackages } from '../data/travelData';
 import '../components/DestinationsGrid.css';
 import './PageBanner.css';
 import './SearchResultsPage.css';
 import { FaClock, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
-import BookingModal from '../components/BookingModal';
 
 const SearchResultsPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [results, setResults] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingItem, setBookingItem] = useState('');
   
   // Parse query parameters
   const queryParams = new URLSearchParams(location.search);
@@ -158,8 +156,7 @@ const SearchResultsPage = () => {
                     <button 
                       className="btn-primary btn-sm"
                       onClick={() => {
-                        setBookingItem(item.name);
-                        setIsModalOpen(true);
+                        navigate('/book', { state: { name: item.name, image: item.image, price: item.price || item.originalPrice, duration: item.duration, type: 'tour' } });
                       }}
                     >
                       Book Now
@@ -170,12 +167,6 @@ const SearchResultsPage = () => {
             ))}
           </div>
         )}
-      </div>
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        destinationName={bookingItem} 
-      />
     </div>
   );
 };

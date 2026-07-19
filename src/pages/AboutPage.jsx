@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { aboutUs, contactInfo } from '../data/travelData';
 import WhyChooseUs from '../components/WhyChooseUs';
 import CTABanner from '../components/CTABanner';
-import BookingModal from '../components/BookingModal';
+import { FaWhatsapp } from 'react-icons/fa';
 
 const AboutPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
@@ -29,7 +30,7 @@ const AboutPage = () => {
               <h2 className="heading-2" style={{marginTop:'12px',marginBottom:'20px'}}>{aboutUs.title}</h2>
               <p className="text-body-lg" style={{marginBottom:'24px'}}>{aboutUs.description}</p>
               <p className="text-body" style={{marginBottom:'32px'}}>{aboutUs.mission.text}</p>
-              <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+              <button onClick={() => navigate('/book', { state: { name: 'General Enquiry', image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80', price: null, duration: null, type: 'general' } })} className="btn-primary">
                 Enquire Now <FaWhatsapp style={{marginLeft: '8px'}} />
               </button>
             </div>
@@ -46,13 +47,6 @@ const AboutPage = () => {
 
       <WhyChooseUs />
       <CTABanner />
-      
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        destinationName="General Enquiry"
-        type="general"
-      />
     </div>
   );
 };

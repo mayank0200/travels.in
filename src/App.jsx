@@ -13,6 +13,7 @@ import SearchResultsPage from './pages/SearchResultsPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
 import RefundPolicyPage from './pages/RefundPolicyPage';
+import BookingPage from './pages/BookingPage';
 import MobileBottomNav from './components/MobileBottomNav';
 import './App.css';
 
@@ -48,6 +49,7 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/refund-policy" element={<RefundPolicyPage />} />
+            <Route path="/book" element={<BookingPage />} />
           </Routes>
         </main>
         <Footer />

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { popularDestinations } from '../data/travelData';
-import BookingModal from '../components/BookingModal';
 import './DestinationDetailPage.css';
 import { FaMapMarkerAlt, FaStar, FaCheck, FaTimes, FaClock, FaCalendarDay, FaInfoCircle, FaOm, FaHeart, FaMap, FaSuitcaseRolling } from 'react-icons/fa';
 
@@ -9,8 +8,6 @@ const DestinationDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingItemName, setBookingItemName] = useState('');
   
   useEffect(() => { 
     window.scrollTo(0, 0); 
@@ -28,9 +25,8 @@ const DestinationDetailPage = () => {
     );
   }
 
-  const handleBookNow = (itemName = destination.name) => {
-    setBookingItemName(itemName);
-    setIsModalOpen(true);
+  const handleBookNow = (itemName = destination.name, itemImage = destination.image, itemPrice = destination.startingPrice, itemDuration = destination.duration) => {
+    navigate('/book', { state: { name: itemName, image: itemImage, price: itemPrice, duration: itemDuration, type: 'tour' } });
   };
 
   const renderSubCategoryGrid = (items, fallbackText) => {
@@ -55,7 +51,7 @@ const DestinationDetailPage = () => {
                 </div>
                 <button 
                   className="btn-primary btn-sm"
-                  onClick={() => handleBookNow(`${item.name} (${destination.name})`)}
+                  onClick={() => handleBookNow(`${item.name} (${destination.name})`, item.image, item.price, item.duration)}
                 >
                   Book Now
                 </button>
@@ -222,11 +218,6 @@ const DestinationDetailPage = () => {
         </div>
       </section>
 
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        destinationName={bookingItemName} 
-      />
     </div>
   );
 };

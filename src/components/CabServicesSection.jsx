@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CabServicesSection.css';
 import { FaTaxi, FaRoad, FaClock, FaCheckCircle, FaStar } from 'react-icons/fa';
-import BookingModal from './BookingModal';
 
 const cabRoutes = [
   { id: 'cab_delhi', destination: 'Delhi', image: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80', distance: '280 km', time: '5 hrs', price: 2500 },
@@ -15,12 +15,10 @@ const cabRoutes = [
 ];
 
 const CabServicesSection = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingRoute, setBookingRoute] = useState('');
+  const navigate = useNavigate();
 
-  const handleBookCab = (destination) => {
-    setBookingRoute(`Jaipur to ${destination}`);
-    setIsModalOpen(true);
+  const handleBookCab = (route) => {
+    navigate('/book', { state: { name: `Jaipur to ${route.destination}`, image: route.image, price: route.price, duration: route.time, type: 'cab' } });
   };
 
   return (
@@ -64,7 +62,7 @@ const CabServicesSection = () => {
                   </div>
                   <button 
                     className="btn-primary btn-sm"
-                    onClick={() => handleBookCab(route.destination)}
+                    onClick={() => handleBookCab(route)}
                   >
                     Book Cab
                   </button>
@@ -78,19 +76,11 @@ const CabServicesSection = () => {
           <p className="mb-6 text-secondary">Looking for a different destination or a larger vehicle like a Tempo Traveller?</p>
           <button 
             className="btn-secondary btn-lg"
-            onClick={() => handleBookCab('Custom Destination (Please Specify)')}
+            onClick={() => navigate('/book', { state: { name: 'Custom Cab - Jaipur to Custom Destination', image: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600&q=80', price: null, duration: null, type: 'cab' } })}
           >
             Request Custom Cab Quote
           </button>
         </div>
-      </div>
-
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        destinationName={bookingRoute}
-        type="cab"
-      />
     </section>
   );
 };
