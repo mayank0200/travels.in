@@ -1,0 +1,49 @@
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0 16px 0; /* Extra padding at bottom for modern phones (safe area) */
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  border-top: 1px solid #f1f5f9;
+}
+
+.mobile-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  flex: 1;
+  padding: 4px 0;
+}
+
+.mobile-bottom-nav__icon {
+  font-size: 1.3rem;
+  margin-bottom: 2px;
+  transition: transform 0.2s ease;
+}
+
+.mobile-bottom-nav__item.active {
+  color: var(--primary);
+}
+
+.mobile-bottom-nav__item.active .mobile-bottom-nav__icon {
+  transform: translateY(-2px);
+}
+
+/* Ensure it only shows on mobile */
+@media (min-width: 769px) {
+  .mobile-bottom-nav.hide-desktop {
+    display: none;
+  }
+}

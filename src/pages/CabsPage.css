@@ -1,0 +1,100 @@
+.cabs-page .page-banner {
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.cabs-booking-widget {
+  background: white;
+  padding: 32px;
+  border-radius: var(--radius-2xl);
+  margin-top: -100px;
+  position: relative;
+  z-index: 10;
+  border: 1px solid var(--border-color);
+}
+
+.cabs-booking-widget .widget-title {
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+}
+
+.cabs-booking-form {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr 1fr auto;
+  gap: 20px;
+  align-items: end;
+}
+
+.cabs-booking-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cabs-booking-form label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cabs-booking-form input {
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  background: var(--bg-secondary);
+  transition: all var(--transition-fast);
+}
+
+.cabs-booking-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(11, 94, 215, 0.1);
+  background: white;
+}
+
+.cabs-booking-form .disabled-input {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.cabs-booking-form .btn-submit {
+  padding: 14px 24px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .cabs-booking-form {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cabs-booking-form .btn-submit {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .cabs-booking-form {
+    grid-template-columns: 1fr;
+  }
+  .cabs-booking-widget {
+    padding: 24px;
+  }
+}

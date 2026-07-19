@@ -1,118 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
-import { FaHome, FaInfoCircle, FaSuitcase, FaCar, FaLandmark, FaPhoneAlt, FaEnvelope, FaBars, FaTimes, FaAngleDown } from 'react-icons/fa';
+import { FaSearch, FaHeart, FaBars, FaTimes, FaChevronDown, FaPhoneAlt, FaWhatsapp } from 'react-icons/fa';
 import { contactInfo } from '../data/travelData';
+import BookingModal from './BookingModal';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
 
-  const NavLinkItem = ({ href, icon, label, dropdown }) => {
-    return (
-      <li 
-        className={`nav-item ${dropdown ? 'has-dropdown' : ''}`}
-        onMouseEnter={() => dropdown && setDropdownOpen(true)}
-        onMouseLeave={() => dropdown && setDropdownOpen(false)}
-      >
-        {dropdown ? (
-          <div className="nav-link-dropdown-trigger">
-            <span className="nav-icon">{icon}</span>
-            {label}
-            <FaAngleDown className="dropdown-arrow" />
-          </div>
-        ) : (
-          <Link to={href} onClick={() => setMenuOpen(false)}>
-            <span className="nav-icon">{icon}</span>
-            {label}
-          </Link>
-        )}
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-        {dropdown && (
-          <ul className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
-            <li><Link to="/packages/rajasthan" onClick={() => setMenuOpen(false)}>Rajasthan Tours</Link></li>
-            <li><Link to="/packages/honeymoon" onClick={() => setMenuOpen(false)}>Honeymoon Tours</Link></li>
-            <li><Link to="/packages/spiritual" onClick={() => setMenuOpen(false)}>Spiritual Tours</Link></li>
-          </ul>
-        )}
-      </li>
-    );
-  };
+  useEffect(() => {
+    setMenuOpen(false);
+    setSearchOpen(false);
+  }, [location]);
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="header" id="home">
-      {/* Top Bar */}
-      <div className="header-topbar">
-        <div className="container flex justify-between items-center">
-          <div className="topbar-left">
-            <a href={`mailto:${contactInfo.email}`} className="topbar-item">
-              <FaEnvelope /> <span>{contactInfo.email}</span>
-            </a>
-            <a href={`tel:${contactInfo.phone}`} className="topbar-item">
-              <FaPhoneAlt /> <span>{contactInfo.phone}</span>
-            </a>
+    <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
+      <div className="header__container container">
+        {/* Logo */}
+        <Link to="/" className="header__logo">
+          <span className="header__logo-icon">✈️</span>
+          <div className="header__logo-text">
+            <span className="header__logo-brand">Rajasthan Gaurav</span>
+            <span className="header__logo-sub">Travels</span>
           </div>
-          <div className="topbar-right">
-            <a href={contactInfo.social.facebook} className="social-icon">f</a>
-            <a href={contactInfo.social.instagram} className="social-icon">𝕚</a>
-            <a href={contactInfo.social.youtube} className="social-icon">▶</a>
-          </div>
-        </div>
-      </div>
+        </Link>
 
-      {/* Main Header */}
-      <div className="header-main">
-        <div className="container flex justify-between items-center">
-          <div className="logo">
-            <Link to="/">
-              <img src="/logo.png" alt="Rajasthan Gaurav Travels" />
-            </Link>
-          </div>
+        {/* Desktop Nav */}
+        <nav className="header__nav hide-mobile">
+          <Link to="/" className={`header__link ${isActive('/') ? 'header__link--active' : ''}`}>Home</Link>
+          <Link to="/tours" className={`header__link ${isActive('/tours') ? 'header__link--active' : ''}`}>Tour Packages</Link>
+          <Link to="/cabs" className={`header__link ${isActive('/cabs') ? 'header__link--active' : ''}`}>Cabs</Link>
+          <Link to="/about" className={`header__link ${isActive('/about') ? 'header__link--active' : ''}`}>About Us</Link>
+          <Link to="/contact" className={`header__link ${isActive('/contact') ? 'header__link--active' : ''}`}>Contact</Link>
+        </nav>
 
-          {/* Desktop Nav */}
-          <nav className="desktop-nav">
-            <ul className="nav-list">
-              <NavLinkItem href="/" icon={<FaHome />} label="Home" />
-              <NavLinkItem href="/about" icon={<FaInfoCircle />} label="About" />
-              <NavLinkItem href="#" icon={<FaSuitcase />} label="Packages" dropdown={true} />
-              <NavLinkItem href="/services" icon={<FaCar />} label="Travel Booking" />
-              <NavLinkItem href="/raj-darshan" icon={<FaLandmark />} label="Raj Darshan" />
-              <NavLinkItem href="/contact" icon={<FaPhoneAlt />} label="Contact Us" />
-            </ul>
-          </nav>
-
-          <a href={contactInfo.whatsapp} className="enquire-btn desktop-only" target="_blank" rel="noreferrer">
-            ENQUIRE NOW →
-          </a>
-
-          {/* Mobile Toggle */}
-          <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        {/* Right Actions */}
+        <div className="header__actions">
+          <button className="header__icon-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Search">
+            <FaSearch />
+          </button>
+          <Link to="/tours" className="header__icon-btn hide-mobile" aria-label="Wishlist">
+            <FaHeart />
+          </Link>
+          <button onClick={() => setIsModalOpen(true)} className="header__cta hide-mobile">
+            <FaWhatsapp /> Enquire Now
+          </button>
+          <button className="header__hamburger hide-desktop" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Nav */}
-      <div className={`mobile-nav ${menuOpen ? 'open' : ''}`}>
-        <ul className="mobile-nav-list">
-          <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-          <li><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
-          <li className="mobile-dropdown-header">Packages</li>
-          <li className="mobile-sub-item"><Link to="/packages/rajasthan" onClick={() => setMenuOpen(false)}>Rajasthan Tours</Link></li>
-          <li className="mobile-sub-item"><Link to="/packages/honeymoon" onClick={() => setMenuOpen(false)}>Honeymoon Tours</Link></li>
-          <li className="mobile-sub-item"><Link to="/packages/spiritual" onClick={() => setMenuOpen(false)}>Spiritual Tours</Link></li>
-          <li><Link to="/services" onClick={() => setMenuOpen(false)}>Travel Booking</Link></li>
-          <li><Link to="/raj-darshan" onClick={() => setMenuOpen(false)}>Raj Darshan</Link></li>
-          <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link></li>
-          
-          <li className="mobile-nav-item">
-            <a href={contactInfo.whatsapp} className="mobile-enquire-btn" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>
-              ENQUIRE NOW
-            </a>
-          </li>
-        </ul>
+      {/* Search Overlay */}
+      {searchOpen && (
+        <div className="header__search-overlay">
+          <div className="container">
+            <div className="header__search-box">
+              <FaSearch className="header__search-icon" />
+              <input type="text" placeholder="Search destinations, tours, packages..." className="header__search-input" autoFocus />
+              <button className="header__search-close" onClick={() => setSearchOpen(false)}>
+                <FaTimes />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Menu */}
+      <div className={`header__mobile-menu hide-desktop ${menuOpen ? 'header__mobile-menu--open' : ''}`}>
+        <div className="header__mobile-menu-inner">
+          <Link to="/" className="header__mobile-link" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link to="/tours" className="header__mobile-link" onClick={() => setMenuOpen(false)}>Tour Packages</Link>
+          <Link to="/cabs" className="header__mobile-link" onClick={() => setMenuOpen(false)}>Cabs</Link>
+          <Link to="/about" className="header__mobile-link" onClick={() => setMenuOpen(false)}>About Us</Link>
+          <Link to="/contact" className="header__mobile-link" onClick={() => setMenuOpen(false)}>Contact</Link>
+          <div className="header__mobile-divider"></div>
+          <a href={`tel:${contactInfo.phone}`} className="header__mobile-link">
+            <FaPhoneAlt /> {contactInfo.phone}
+          </a>
+          <button 
+            onClick={() => { setIsModalOpen(true); setMenuOpen(false); }} 
+            className="btn-primary" 
+            style={{marginTop: '16px', width: '100%', textAlign: 'center', display: 'block'}}
+          >
+            Enquire Now
+          </button>
+        </div>
       </div>
+
+      <BookingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        destinationName="General Enquiry"
+        type="general"
+      />
     </header>
   );
 };

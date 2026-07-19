@@ -3,49 +3,42 @@ import './SplashScreen.css';
 
 const SplashScreen = ({ onFinish }) => {
   const [exiting, setExiting] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Start exit animation after 3.5 seconds
-    const exitTimer = setTimeout(() => {
-      setExiting(true);
-    }, 3500);
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) { clearInterval(interval); return 100; }
+        return prev + 4;
+      });
+    }, 80);
 
-    // Fully remove splash after exit animation completes
-    const removeTimer = setTimeout(() => {
-      onFinish();
-    }, 4300);
+    const exitTimer = setTimeout(() => setExiting(true), 2200);
+    const removeTimer = setTimeout(() => onFinish(), 2800);
 
-    return () => {
-      clearTimeout(exitTimer);
-      clearTimeout(removeTimer);
-    };
+    return () => { clearInterval(interval); clearTimeout(exitTimer); clearTimeout(removeTimer); };
   }, [onFinish]);
 
   return (
-    <div className={`splash-screen ${exiting ? 'exit' : ''}`}>
-      <div className="splash-bg"></div>
-
-      {/* Floating particles */}
-      <div className="splash-particles">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="particle"></div>
+    <div className={`splash ${exiting ? 'splash--exit' : ''}`}>
+      <div className="splash__bg"></div>
+      <div className="splash__particles">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div key={i} className="splash__particle" style={{ '--i': i }}></div>
         ))}
       </div>
-
-      {/* Mandala decoration */}
-      <div className="splash-mandala"></div>
-
-      {/* Main content */}
-      <div className="splash-content">
-        <div className="splash-chalo">CHALO</div>
-        <div className="splash-rajasthan">RAJASTHAN</div>
-        <div className="splash-line"></div>
-        <div className="splash-tagline">Explore the Land of Kings</div>
+      <div className="splash__content">
+        <div className="splash__icon">✈️</div>
+        <div className="splash__brand" style={{fontSize: 'clamp(2rem, 5vw, 3.5rem)'}}>RAJASTHAN GAURAV</div>
+        <div className="splash__brand splash__brand--accent" style={{fontSize: 'clamp(2rem, 5vw, 3.5rem)'}}>TRAVELS</div>
+        <div className="splash__line"></div>
+        <div className="splash__tagline">Discover Your Next Adventure</div>
       </div>
-
-      {/* Loader bar */}
-      <div className="splash-loader">
-        <div className="splash-loader-bar"></div>
+      <div className="splash__loader">
+        <div className="splash__loader-track">
+          <div className="splash__loader-bar" style={{ width: `${progress}%` }}></div>
+        </div>
+        <span className="splash__loader-text">{progress}%</span>
       </div>
     </div>
   );

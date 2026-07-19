@@ -1,47 +1,89 @@
 import React from 'react';
 import './Offers.css';
-import { offers } from '../data/travelData';
+import { trendingPackages } from '../data/travelData';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { FaStar, FaClock, FaHotel, FaUtensils, FaCar } from 'react-icons/fa';
+import { useState } from 'react';
+import BookingModal from './BookingModal';
 
-const Offers = () => {
-  const [titleRef, titleVisible] = useScrollAnimation(0.1);
-  const [gridRef, gridVisible] = useScrollAnimation(0.1);
+const AnimatedSection = ({ children, className = '' }) => {
+  const [ref, isVisible] = useScrollAnimation(0.1);
+  return <div ref={ref} className={`animate-on-scroll ${isVisible ? 'visible' : ''} ${className}`}>{children}</div>;
+};
+
+const TrendingPackages = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookingItem, setBookingItem] = useState('');
 
   return (
-    <section className="offers-section container" id="offers">
-      <div ref={titleRef} className={`offers-header animate-on-scroll ${titleVisible ? 'visible' : ''}`}>
-        <h2 className="offers-title section-title">Offers</h2>
-        <div className="offers-nav">
-          <span className="nav-item active">All Offers</span>
-          <span className="nav-item">Flights</span>
-          <span className="nav-item">Hotels</span>
-          <span className="nav-item">Holidays</span>
-        </div>
-      </div>
-      
-      <div ref={gridRef} className={`offers-scroll-container animate-on-scroll ${gridVisible ? 'visible' : ''}`}>
-        <div className="offers-grid">
-          {offers.map(offer => (
-            <div key={offer.id} className="offer-card shadow-md card-hover-lift">
-              <div className="offer-img-container img-zoom-container">
-                <img src={offer.image} alt={offer.title} className="offer-img" />
+    <section className="trending" id="packages">
+      <div className="container">
+        <AnimatedSection>
+          <div className="section-header">
+            <span className="section-label">🔥 Trending Now</span>
+            <h2 className="section-title">Popular Tour Packages</h2>
+            <p className="section-subtitle">Handcrafted itineraries at unbeatable prices with premium inclusions</p>
+          </div>
+        </AnimatedSection>
+
+        <div className="trending__grid">
+          {trendingPackages.map((pkg, index) => (
+            <AnimatedSection key={pkg.id}>
+              <div className="trending__card card-hover-lift">
+                <div className="trending__img-wrap">
+                  <img src={pkg.image} alt={pkg.name} className="trending__img" loading="lazy" />
+                  <span className="trending__discount badge badge-red">{pkg.discount}% OFF</span>
+                  <div className="trending__img-overlay">
+                    <span className="trending__category badge badge-orange">{pkg.category}</span>
+                  </div>
+                </div>
+                <div className="trending__body">
+                  <div className="trending__rating">
+                    <FaStar className="trending__star" />
+                    <span className="trending__rating-val">{pkg.rating}</span>
+                    <span className="trending__review-count">({pkg.reviewCount} reviews)</span>
+                  </div>
+                  <h3 className="trending__name">{pkg.name}</h3>
+                  <div className="trending__highlights">
+                    {pkg.highlights.map((h, i) => (
+                      <span key={i} className="trending__highlight">{h}</span>
+                    ))}
+                  </div>
+                  <div className="trending__features">
+                    <span><FaClock /> {pkg.duration}</span>
+                    <span><FaHotel /> {pkg.hotelStars}★ Hotel</span>
+                    {pkg.mealsIncluded && <span><FaUtensils /> Meals</span>}
+                    <span><FaCar /> {pkg.transportType}</span>
+                  </div>
+                  <div className="trending__footer">
+                    <div className="trending__pricing">
+                      <span className="trending__original-price">₹{pkg.originalPrice.toLocaleString()}</span>
+                      <span className="trending__price">₹{pkg.price.toLocaleString()}</span>
+                      <span className="trending__per">per person</span>
+                    </div>
+                    <button 
+                      className="btn-primary btn-sm" 
+                      onClick={() => {
+                        setBookingItem(pkg.name);
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      Book Now
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="offer-content">
-                <p className="offer-tag">DOM FLIGHTS</p>
-                <h3 className="offer-card-title">{offer.title}</h3>
-                <div className="offer-divider"></div>
-                <p className="offer-desc">{offer.description}</p>
-              </div>
-              <div className="offer-footer">
-                <div className="offer-tc">T&C's Apply</div>
-                <button className="book-btn">BOOK NOW</button>
-              </div>
-            </div>
+            </AnimatedSection>
           ))}
         </div>
       </div>
+      <BookingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        destinationName={bookingItem} 
+      />
     </section>
   );
 };
 
-export default Offers;
+export default TrendingPackages;

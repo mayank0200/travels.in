@@ -1,202 +1,142 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HeroSection.css';
-import { rajasthanCities } from '../data/travelData';
+import { FaSearch, FaMapMarkerAlt, FaCalendarAlt, FaClock, FaChevronDown } from 'react-icons/fa';
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const [tripType, setTripType] = useState('one-way');
-  const [fromCity, setFromCity] = useState('Jaipur');
-  const [toCity, setToCity] = useState('Udaipur');
-  const [departureDate, setDepartureDate] = useState('');
-  const [returnDate, setReturnDate] = useState('');
-  const [packageType, setPackageType] = useState('Regular');
-  
-  // Custom dropdown states
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'from', 'to', 'travellers'
-  const [travellers, setTravellers] = useState(2);
-  const dropdownRef = useRef(null);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setActiveDropdown(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleSwap = () => {
-    setFromCity(toCity);
-    setToCity(fromCity);
-  };
+  const [destination, setDestination] = useState('');
+  const [tourType, setTourType] = useState('');
+  const [duration, setDuration] = useState('');
 
   const handleSearch = () => {
-    // Navigate to a search results page with the parameters
-    navigate(`/search?from=${fromCity}&to=${toCity}&type=${packageType}&date=${departureDate}&travellers=${travellers}`);
+    navigate(`/search?to=${destination}&type=${tourType}&dur=${duration}`);
   };
 
   return (
-    <section className="hero-section">
-      <div className="hero-bg"></div>
-      <div className="container hero-content">
-        
-        <div className="search-widget" ref={dropdownRef}>
-          <div className="trip-types">
-            <label className="radio-label">
-              <input type="radio" name="trip" checked={tripType === 'one-way'} onChange={() => setTripType('one-way')} />
-              <span className="radio-text">One Way</span>
-            </label>
-            <label className="radio-label">
-              <input type="radio" name="trip" checked={tripType === 'round-trip'} onChange={() => setTripType('round-trip')} />
-              <span className="radio-text">Round Trip</span>
-            </label>
-            <span className="book-cabs-badge">Book Intercity Cabs</span>
+    <section className="hero">
+      <div className="hero__bg">
+        <img 
+          src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1920&q=80" 
+          alt="Rajasthan Gaurav Travels" 
+          className="hero__bg-img"
+        />
+      </div>
+      <div className="hero__overlay"></div>
+
+      {/* Floating Elements */}
+      <div className="hero__floaters">
+        <div className="hero__float hero__float--1"></div>
+        <div className="hero__float hero__float--2"></div>
+        <div className="hero__float hero__float--3"></div>
+      </div>
+
+      <div className="hero__content container">
+        <div className="hero__text">
+          <span className="hero__label">✨ Premium Travel Experiences</span>
+          <h1 className="hero__title">
+            Discover<br/>
+            <span className="hero__title-accent">Rajasthan</span>
+          </h1>
+          <p className="hero__subtitle">
+            Explore breathtaking destinations, handcrafted tour packages, and unforgettable experiences across India's most stunning landscapes.
+          </p>
+          <div className="hero__cta-group">
+            <button className="btn-primary btn-lg" onClick={() => navigate('/tours')}>
+              Explore Tours →
+            </button>
+            <button className="btn-outline btn-lg" onClick={() => navigate('/contact')}>
+              Plan My Trip
+            </button>
           </div>
-
-          <div className="search-inputs-grid">
-            {/* FROM */}
-            <div 
-              className={`input-box ${activeDropdown === 'from' ? 'active' : ''}`} 
-              onClick={() => setActiveDropdown('from')}
-            >
-              <span className="box-label">From</span>
-              <div className="box-main-val">{fromCity}</div>
-              <span className="box-sub-val">Rajasthan, India</span>
-              
-              {activeDropdown === 'from' && (
-                <div className="custom-dropdown shadow-lg">
-                  <div className="dropdown-search">
-                    <input type="text" placeholder="Search City" autoFocus />
-                  </div>
-                  <ul className="city-list">
-                    {rajasthanCities.map(city => (
-                      <li key={city} onClick={(e) => { e.stopPropagation(); setFromCity(city); setActiveDropdown(null); }}>
-                        <div className="city-name">{city}</div>
-                        <div className="city-state">Rajasthan, India</div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            <div className="swap-btn-container">
-              <button className="swap-icon-btn shadow-md" onClick={(e) => { e.stopPropagation(); handleSwap(); }}>
-                ⇄
-              </button>
-            </div>
-
-            {/* TO */}
-            <div 
-              className={`input-box ${activeDropdown === 'to' ? 'active' : ''}`} 
-              onClick={() => setActiveDropdown('to')}
-            >
-              <span className="box-label">To</span>
-              <div className="box-main-val">{toCity}</div>
-              <span className="box-sub-val">Rajasthan, India</span>
-
-              {activeDropdown === 'to' && (
-                <div className="custom-dropdown shadow-lg">
-                  <div className="dropdown-search">
-                    <input type="text" placeholder="Search City" autoFocus />
-                  </div>
-                  <ul className="city-list">
-                    {rajasthanCities.map(city => (
-                      <li key={city} onClick={(e) => { e.stopPropagation(); setToCity(city); setActiveDropdown(null); }}>
-                        <div className="city-name">{city}</div>
-                        <div className="city-state">Rajasthan, India</div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* DEPARTURE */}
-            <div className="input-box date-box">
-              <span className="box-label">Departure <span className="down-arrow">▼</span></span>
-              <input 
-                type="date" 
-                className="hidden-date-input" 
-                value={departureDate}
-                onChange={(e) => setDepartureDate(e.target.value)}
-              />
-              <div className="box-main-val date-val">
-                {departureDate ? new Date(departureDate).getDate() : 'Select'} 
-                <span className="date-month"> {departureDate ? new Date(departureDate).toLocaleString('default', { month: 'short', year: '2-digit' }) : 'Date'}</span>
-              </div>
-              <span className="box-sub-val">{departureDate ? new Date(departureDate).toLocaleDateString('en-US', { weekday: 'long' }) : 'Any day'}</span>
-            </div>
-
-            {/* RETURN */}
-            <div className={`input-box date-box ${tripType === 'one-way' ? 'disabled' : ''}`}>
-              <span className="box-label">Return <span className="down-arrow">▼</span></span>
-              <input 
-                type="date" 
-                className="hidden-date-input" 
-                value={returnDate}
-                onChange={(e) => setReturnDate(e.target.value)}
-                disabled={tripType === 'one-way'}
-              />
-              <div className="box-main-val date-val">
-                {tripType === 'one-way' ? 'Tap to add' : (returnDate ? new Date(returnDate).getDate() : 'Select')} 
-                {tripType !== 'one-way' && <span className="date-month"> {returnDate ? new Date(returnDate).toLocaleString('default', { month: 'short', year: '2-digit' }) : 'Date'}</span>}
-              </div>
-              <span className="box-sub-val">{returnDate && tripType !== 'one-way' ? new Date(returnDate).toLocaleDateString('en-US', { weekday: 'long' }) : 'Round trip for great deals'}</span>
-            </div>
-
-            {/* TRAVELLERS */}
-            <div 
-              className={`input-box ${activeDropdown === 'travellers' ? 'active' : ''}`}
-              onClick={() => setActiveDropdown('travellers')}
-            >
-              <span className="box-label">Travellers & Class <span className="down-arrow">▼</span></span>
-              <div className="box-main-val">{travellers} <span className="text-md">Traveler{travellers > 1 ? 's' : ''}</span></div>
-              <span className="box-sub-val">Standard Class</span>
-
-              {activeDropdown === 'travellers' && (
-                <div className="custom-dropdown shadow-lg travellers-dropdown" onClick={(e) => e.stopPropagation()}>
-                  <div className="traveller-counter">
-                    <span className="counter-label">Adults</span>
-                    <div className="counter-controls">
-                      <button onClick={() => setTravellers(Math.max(1, travellers - 1))}>-</button>
-                      <span>{travellers}</span>
-                      <button onClick={() => setTravellers(travellers + 1)}>+</button>
-                    </div>
-                  </div>
-                  <button className="btn-apply" onClick={() => setActiveDropdown(null)}>APPLY</button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* FARE TYPES */}
-          <div className="fare-types-container">
-            <span className="fare-title">Select A Package Type:</span>
-            <div className="fare-options">
-              {['Regular', 'Honeymoon', 'Spiritual', 'Adventure'].map(type => (
-                <label key={type} className={`fare-pill ${packageType === type ? 'active' : ''}`}>
-                  <input 
-                    type="radio" 
-                    name="fare" 
-                    checked={packageType === type}
-                    onChange={() => setPackageType(type)}
-                  /> 
-                  {type}
-                </label>
-              ))}
-            </div>
-          </div>
-
         </div>
-        
-        <div className="search-action">
-          <button className="btn-search-massive" onClick={handleSearch}>SEARCH</button>
+
+        {/* Search Widget */}
+        <div className="hero__search glass">
+          <div className="hero__search-row">
+            <div className="hero__search-field">
+              <FaMapMarkerAlt className="hero__search-field-icon" />
+              <div className="hero__search-field-content">
+                <label className="hero__search-label">Destination</label>
+                <select 
+                  className="hero__search-select" 
+                  value={destination} 
+                  onChange={e => setDestination(e.target.value)}
+                >
+                  <option value="">Where to?</option>
+                  <option value="rajasthan">Rajasthan</option>
+                  <option value="kashmir">Kashmir</option>
+                  <option value="goa">Goa</option>
+                  <option value="kerala">Kerala</option>
+                  <option value="ladakh">Ladakh</option>
+                  <option value="himachal">Himachal</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="hero__search-divider"></div>
+
+            <div className="hero__search-field">
+              <FaCalendarAlt className="hero__search-field-icon" />
+              <div className="hero__search-field-content">
+                <label className="hero__search-label">Tour Type</label>
+                <select 
+                  className="hero__search-select" 
+                  value={tourType} 
+                  onChange={e => setTourType(e.target.value)}
+                >
+                  <option value="">Select type</option>
+                  <option value="adventure">Adventure</option>
+                  <option value="honeymoon">Honeymoon</option>
+                  <option value="family">Family</option>
+                  <option value="luxury">Luxury</option>
+                  <option value="religious">Religious</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="hero__search-divider"></div>
+
+            <div className="hero__search-field">
+              <FaClock className="hero__search-field-icon" />
+              <div className="hero__search-field-content">
+                <label className="hero__search-label">Duration</label>
+                <select 
+                  className="hero__search-select" 
+                  value={duration} 
+                  onChange={e => setDuration(e.target.value)}
+                >
+                  <option value="">Any duration</option>
+                  <option value="2-3">2-3 Days</option>
+                  <option value="4-5">4-5 Days</option>
+                  <option value="6-7">6-7 Days</option>
+                  <option value="8+">8+ Days</option>
+                </select>
+              </div>
+            </div>
+
+            <button className="hero__search-btn" onClick={handleSearch}>
+              <FaSearch />
+              <span>Search</span>
+            </button>
+          </div>
         </div>
-        
+
+        {/* Trust badges */}
+        <div className="hero__badges">
+          <div className="hero__badge"><span>💰</span> Best Prices</div>
+          <div className="hero__badge"><span>🛡️</span> Safe Travels</div>
+          <div className="hero__badge"><span>⭐</span> Quality Service</div>
+          <div className="hero__badge"><span>👑</span> Luxury Experiences</div>
+        </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="hero__scroll">
+        <div className="hero__scroll-mouse">
+          <div className="hero__scroll-wheel"></div>
+        </div>
+        <span>Scroll to explore</span>
       </div>
     </section>
   );
