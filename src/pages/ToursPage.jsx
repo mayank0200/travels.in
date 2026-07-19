@@ -104,6 +104,7 @@ const ToursPage = () => {
             </div>
           </div>
         </div>
+      </section>
     </div>
   );
 };

@@ -167,6 +167,7 @@ const SearchResultsPage = () => {
             ))}
           </div>
         )}
+      </div>
     </div>
   );
 };
