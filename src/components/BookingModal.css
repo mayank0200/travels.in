@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.15s ease-out;
 }
 
 .booking-modal__content {
@@ -19,7 +19,7 @@
   padding: 40px;
   position: relative;
   box-shadow: var(--shadow-xl);
-  animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slideUpFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   max-height: 90vh;
   overflow-y: auto;
 }
