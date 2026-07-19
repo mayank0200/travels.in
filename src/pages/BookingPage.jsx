@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { FaUser, FaPhone, FaCalendarAlt, FaUsers, FaCommentDots, FaWhatsapp, FaShieldAlt, FaLock, FaCheckCircle, FaChevronRight, FaMapMarkerAlt, FaClock, FaRupeeSign, FaSuitcaseRolling, FaTaxi } from 'react-icons/fa';
+import { FaUser, FaPhone, FaCalendarAlt, FaUsers, FaCommentDots, FaWhatsapp, FaShieldAlt, FaLock, FaCheckCircle, FaChevronRight, FaMapMarkerAlt, FaClock, FaRupeeSign, FaSuitcaseRolling, FaTaxi, FaTimes } from 'react-icons/fa';
 import { contactInfo } from '../data/travelData';
 import './BookingPage.css';
 
@@ -58,6 +58,9 @@ const BookingPage = () => {
     <div className="booking-page">
       {/* Hero Banner */}
       <div className="booking-page__hero">
+        <button className="booking-page__close" onClick={() => navigate(-1)} aria-label="Go Back">
+          <FaTimes />
+        </button>
         <div className="container booking-page__hero-content">
           <div className="booking-page__breadcrumb">
             <Link to="/">Home</Link>
